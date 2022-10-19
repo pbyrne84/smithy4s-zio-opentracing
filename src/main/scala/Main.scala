@@ -6,9 +6,10 @@ import org.http4s.ember.server._
 import org.http4s._
 import com.comcast.ip4s._
 import smithy4s.http4s.SimpleRestJsonBuilder
+import zhttp.http.HttpError.BadRequest
 
 object HelloWorldImpl extends HelloWorldService[IO] {
-  def hello(name: String, town: Option[String]) : IO[Greeting] = IO.pure {
+  def hello(name: String, town: Option[String]): IO[Greeting] = IO.pure {
     town match {
       case None => Greeting(s"Hello $name!")
       case Some(t) => Greeting(s"Hello $name from $t!")
@@ -18,7 +19,13 @@ object HelloWorldImpl extends HelloWorldService[IO] {
 
 object Routes {
   private val example: Resource[IO, HttpRoutes[IO]] =
-    SimpleRestJsonBuilder.routes(HelloWorldImpl).resource
+    SimpleRestJsonBuilder
+      .routes(HelloWorldImpl)
+      .mapErrors { case e: Throwable =>
+        println(e)
+        BadRequest(s"Hello $e!")
+      }
+      .resource
 
   private val docs: HttpRoutes[IO] =
     smithy4s.http4s.swagger.docs[IO](HelloWorldService)
@@ -29,14 +36,14 @@ object Routes {
 object Main extends IOApp.Simple {
 
   val run = Routes.all
-      .flatMap { routes =>
-        EmberServerBuilder
-            .default[IO]
-            .withPort(port"9000")
-            .withHost(host"localhost")
-            .withHttpApp(routes.orNotFound)
-            .build
-      }
-      .use(_ => IO.never)
+    .flatMap { routes =>
+      EmberServerBuilder
+        .default[IO]
+        .withPort(port"9000")
+        .withHost(host"localhost")
+        .withHttpApp(routes.orNotFound)
+        .build
+    }
+    .use(_ => IO.never)
 
 }

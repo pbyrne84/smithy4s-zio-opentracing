@@ -9,6 +9,7 @@ service HelloWorldService {
     operations: [Hello]
 }
 
+@documentation("This *is* documentation about the shape.")
 @http(method: "POST", uri: "/{name}", code: 200)
 operation Hello {
     input: Person,
@@ -18,7 +19,7 @@ operation Hello {
 structure Person {
     @httpLabel
     @required
-    @pattern("^[A-Za-z0-9 ]+$\\{'$'}")
+    @pattern("^[A-Z]+")
     name: String,
 
     @httpQuery("town")
@@ -29,3 +30,4 @@ structure Greeting {
     @required
     message: String
 }
+
