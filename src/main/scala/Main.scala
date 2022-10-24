@@ -5,25 +5,27 @@ import org.http4s.implicits._
 import org.http4s.ember.server._
 import org.http4s._
 import com.comcast.ip4s._
+import smithy4s.http.MetadataError.FailedConstraint
 import smithy4s.http4s.SimpleRestJsonBuilder
 import zhttp.http.HttpError.BadRequest
 
 object HelloWorldImpl extends HelloWorldService[IO] {
-  def hello(name: String, town: Option[String]): IO[Greeting] = IO.pure {
-    town match {
-      case None => Greeting(s"Hello $name!")
-      case Some(t) => Greeting(s"Hello $name from $t!")
+  def hello(name: String, town: Option[String]): IO[Greeting] = IO
+    .pure {
+      town match {
+        case None => Greeting(s"Hello $name!")
+        case Some(t) => Greeting(s"Hello $name from $t!")
+      }
     }
-  }
 }
 
 object Routes {
   private val example: Resource[IO, HttpRoutes[IO]] =
     SimpleRestJsonBuilder
       .routes(HelloWorldImpl)
-      .mapErrors { case e: Throwable =>
+      .mapErrors { case e: FailedConstraint =>
         println(e)
-        BadRequest(s"Hello $e!")
+        GenericBadRequestError(Some(s"Hello $e!"))
       }
       .resource
 
