@@ -63,5 +63,17 @@ structure Person {
 structure Greeting {
     @required
     message: String
+
+    @httpHeader("X-B3-TraceId")
+    traceId: String
+
+    @httpHeader("X-B3-ParentSpanId")
+    parentSpanId: String
+
+    @httpHeader("X-B3-SpanId")
+    spanId: String
+
+    @httpHeader("X-B3-Sampled")
+    sampled: String
 }
 
