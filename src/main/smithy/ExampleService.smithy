@@ -1,3 +1,4 @@
+$version: "2.0"
 namespace smithy4s.hello
 
 use smithy4s.api#simpleRestJson
@@ -31,6 +32,7 @@ structure GenericServerError {
     @httpHeader("X-B3-Sampled")
     sampled: String
 }
+
 
 @error("client")
 @httpError(400)
@@ -86,15 +88,9 @@ operation Hello {
     errors: [GenericServerError,GenericBadRequestError,GenericUnprocessableEntityError]
 }
 
-structure Person {
-    @httpLabel
-    @required
-    @pattern("^[A-Z]+")
-    name: String,
 
-    @httpQuery("town")
-    town: String
-
+@mixin
+structure IncomingRequestTracing {
     @httpHeader("X-B3-TraceId")
     traceId: String
 
@@ -106,6 +102,17 @@ structure Person {
 
     @httpHeader("X-B3-Sampled")
     sampled: String
+}
+
+
+structure Person with [IncomingRequestTracing]{
+    @httpLabel
+    @required
+    @pattern("^[A-Z]+")
+    name: String,
+
+    @httpQuery("town")
+    town: String
 }
 
 structure Greeting {
