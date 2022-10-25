@@ -19,9 +19,13 @@ object HelloWorldImpl extends HelloWorldService[IO] {
       sampled: Option[String]
   ): IO[Greeting] = IO
     .pure {
+
+      def createGreeting(str: String): Greeting =
+        Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
+
       town match {
-        case None => Greeting(s"Hello $name!")
-        case Some(t) => Greeting(s"Hello $name from $t!")
+        case None => createGreeting(s"Hello $name!")
+        case Some(t) => createGreeting(s"Hello $name from $t!")
       }
     }
 }

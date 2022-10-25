@@ -14,18 +14,66 @@ service HelloWorldService {
 @httpError(500)
 structure GenericServerError {
     message: String
+
+    @required
+    @httpHeader("X-B3-TraceId")
+    traceId: String
+
+    @required
+    @httpHeader("X-B3-ParentSpanId")
+    parentSpanId: String
+
+    @required
+    @httpHeader("X-B3-SpanId")
+    spanId: String
+
+    @required
+    @httpHeader("X-B3-Sampled")
+    sampled: String
 }
 
 @error("client")
 @httpError(400)
 structure GenericBadRequestError {
     message: String
+
+    @required
+    @httpHeader("X-B3-TraceId")
+    traceId: String
+
+    @required
+    @httpHeader("X-B3-ParentSpanId")
+    parentSpanId: String
+
+    @required
+    @httpHeader("X-B3-SpanId")
+    spanId: String
+
+    @required
+    @httpHeader("X-B3-Sampled")
+    sampled: String
 }
 
 @error("client")
 @httpError(422)
 structure GenericUnprocessableEntityError {
     message: String
+
+    @required
+    @httpHeader("X-B3-TraceId")
+    traceId: String
+
+    @required
+    @httpHeader("X-B3-ParentSpanId")
+    parentSpanId: String
+
+    @required
+    @httpHeader("X-B3-SpanId")
+    spanId: String
+
+    @required
+    @httpHeader("X-B3-Sampled")
+    sampled: String
 }
 
 
@@ -64,15 +112,19 @@ structure Greeting {
     @required
     message: String
 
+    @required
     @httpHeader("X-B3-TraceId")
     traceId: String
 
+    @required
     @httpHeader("X-B3-ParentSpanId")
     parentSpanId: String
 
+    @required
     @httpHeader("X-B3-SpanId")
     spanId: String
 
+    @required
     @httpHeader("X-B3-Sampled")
     sampled: String
 }
