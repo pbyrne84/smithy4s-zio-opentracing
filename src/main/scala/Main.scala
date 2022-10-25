@@ -10,7 +10,14 @@ import smithy4s.http4s.SimpleRestJsonBuilder
 import zhttp.http.HttpError.BadRequest
 
 object HelloWorldImpl extends HelloWorldService[IO] {
-  def hello(name: String, town: Option[String]): IO[Greeting] = IO
+  def hello(
+      name: String,
+      town: Option[String],
+      traceId: Option[String],
+      parentSpanId: Option[String],
+      spanId: Option[String],
+      sampled: Option[String]
+  ): IO[Greeting] = IO
     .pure {
       town match {
         case None => Greeting(s"Hello $name!")
