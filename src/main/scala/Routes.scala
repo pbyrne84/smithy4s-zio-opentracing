@@ -8,7 +8,7 @@ object Routes {
   private val docs =
     smithy4s.http4s.swagger.docs[IO](smithy4s.hello.HelloWorldService)
 
-  def getAll(local: IOLocal[Option[RequestInfo]]): Resource[IO, HttpRoutes[IO]] = {
+  def getAll(local: IOLocal[RequestInfo]): Resource[IO, HttpRoutes[IO]] = {
     val eventualRequestInfo = createEventualMaybeRequestInfo(local)
 
     smithy4s.http4s.SimpleRestJsonBuilder
@@ -25,16 +25,11 @@ object Routes {
   }
 
   private def createEventualMaybeRequestInfo(
-      local: IOLocal[Option[RequestInfo]]
+      local: IOLocal[RequestInfo]
   ): IO[RequestInfo] = {
-    local.get.flatMap {
-      case Some(value) => IO.pure(value)
-      case None =>
-        IO.raiseError(
-          new IllegalAccessException(
-            "Tried to access the value outside of the lifecycle of an http request"
-          )
-        )
+    local.get.flatMap { value =>
+      IO.pure(value)
+
     }
   }
 }
