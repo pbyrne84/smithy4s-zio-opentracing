@@ -7,16 +7,11 @@ import org.http4s._
 import com.comcast.ip4s._
 import smithy4s.http.MetadataError.FailedConstraint
 import smithy4s.http4s.SimpleRestJsonBuilder
-import zhttp.http.HttpError.BadRequest
 
 object HelloWorldImpl extends HelloWorldService[IO] {
   def hello(
       name: String,
-      town: Option[String],
-      traceId: Option[String],
-      parentSpanId: Option[String],
-      spanId: Option[String],
-      sampled: Option[String]
+      town: Option[String]
   ): IO[Greeting] = IO
     .pure {
 
@@ -36,7 +31,7 @@ object Routes {
       .routes(HelloWorldImpl)
       .mapErrors { case e: FailedConstraint =>
         println(e)
-        GenericBadRequestError(Some(s"Hello $e!"))
+        GenericBadRequestError("", "", "", "", message = Some(s"Hello $e!"))
       }
       .resource
 

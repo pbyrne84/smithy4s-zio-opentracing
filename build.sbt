@@ -6,6 +6,8 @@ val zioConfigVersion = "3.0.2"
 val zioVersion = "2.0.0"
 val zioLoggingVersion = "2.1.0"
 //val zioLoggingVersion = "2.1.0+3-a733f542+20220908-1603-SNAPSHOT"
+val natchezExtrasVersion = "6.2.4"
+val natchezVersion = "0.1.5"
 
 libraryDependencies ++= List(
   "dev.zio" %% "zio" % zioVersion,
@@ -15,7 +17,11 @@ libraryDependencies ++= List(
   "org.slf4j" % "jul-to-slf4j" % "1.7.36",
   "dev.zio" %% "zio-logging-slf4j" % zioLoggingVersion,
   "dev.zio" %% "zio-logging-slf4j-bridge" % zioLoggingVersion,
+  "com.ovoenergy" %% "natchez-extras-http4s-stable" % natchezExtrasVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  "org.tpolecat" %% "natchez-log" % natchezVersion,
+  "org.tpolecat" %% "natchez-http4s" % "0.3.2",
+  "org.tpolecat" %% "natchez-jaeger" % natchezVersion,
   "io.opentracing" % "opentracing-util" % "0.33.0",
   "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % "1.17.0",
   "io.opentelemetry" % "opentelemetry-sdk-extension-autoconfigure" % "1.17.0-alpha",
@@ -44,16 +50,15 @@ libraryDependencies ++= List(
 )
 
 val example = project
-    .in(file("."))
-    .enablePlugins(Smithy4sCodegenPlugin)
-    .settings(
-      libraryDependencies ++= Seq(
-        "com.disneystreaming.smithy4s" %% "smithy4s-http4s" % smithy4sVersion.value,
-        "com.disneystreaming.smithy4s" %% "smithy4s-http4s-swagger" % smithy4sVersion.value,
-        "org.http4s" %% "http4s-ember-server" % "0.23.16"
-      )
+  .in(file("."))
+  .enablePlugins(Smithy4sCodegenPlugin)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.disneystreaming.smithy4s" %% "smithy4s-http4s" % smithy4sVersion.value,
+      "com.disneystreaming.smithy4s" %% "smithy4s-http4s-swagger" % smithy4sVersion.value,
+      "org.http4s" %% "http4s-ember-server" % "0.23.16"
     )
-
+  )
 
 Test / parallelExecution := false
 

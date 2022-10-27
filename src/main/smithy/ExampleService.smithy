@@ -11,11 +11,8 @@ service HelloWorldService {
     errors: [GenericServerError,GenericBadRequestError,GenericUnprocessableEntityError]
 }
 
-@error("server")
-@httpError(500)
-structure GenericServerError {
-    message: String
-
+@mixin
+structure OutgoingRequestTracing {
     @required
     @httpHeader("X-B3-TraceId")
     traceId: String
@@ -33,49 +30,22 @@ structure GenericServerError {
     sampled: String
 }
 
+@error("server")
+@httpError(500)
+structure GenericServerError with [OutgoingRequestTracing] {
+    message: String
+}
 
 @error("client")
 @httpError(400)
-structure GenericBadRequestError {
+structure GenericBadRequestError with [OutgoingRequestTracing]  {
     message: String
-
-    @required
-    @httpHeader("X-B3-TraceId")
-    traceId: String
-
-    @required
-    @httpHeader("X-B3-ParentSpanId")
-    parentSpanId: String
-
-    @required
-    @httpHeader("X-B3-SpanId")
-    spanId: String
-
-    @required
-    @httpHeader("X-B3-Sampled")
-    sampled: String
 }
 
 @error("client")
 @httpError(422)
-structure GenericUnprocessableEntityError {
+structure GenericUnprocessableEntityError with [OutgoingRequestTracing] {
     message: String
-
-    @required
-    @httpHeader("X-B3-TraceId")
-    traceId: String
-
-    @required
-    @httpHeader("X-B3-ParentSpanId")
-    parentSpanId: String
-
-    @required
-    @httpHeader("X-B3-SpanId")
-    spanId: String
-
-    @required
-    @httpHeader("X-B3-Sampled")
-    sampled: String
 }
 
 
@@ -105,7 +75,7 @@ structure IncomingRequestTracing {
 }
 
 
-structure Person with [IncomingRequestTracing]{
+structure Person {
     @httpLabel
     @required
     @pattern("^[A-Z]+")
