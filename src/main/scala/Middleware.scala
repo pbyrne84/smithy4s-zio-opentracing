@@ -10,7 +10,7 @@ import org.http4s.headers.{
   `X-B3-SpanId`,
   `X-B3-TraceId`
 }
-import trace.B3TraceId
+import trace._
 
 object Middleware {
   implicit class RequestOps(request: Request[IO]) {
@@ -30,10 +30,14 @@ object Middleware {
           s"${contentType.mediaType.mainType}/${contentType.mediaType.subType}"
         ),
         maybeUserAgent = request.attemptGetHeader[`User-Agent`, String](_.product.toString),
-        maybeB3TraceId = request.attemptGetHeader[`X-B3-TraceId`, B3TraceId](a => B3TraceId(a)),
-        maybeB3SpanId = request.attemptGetHeader[`X-B3-SpanId`, String](_.toString),
-        maybeB3ParentSpanId = request.attemptGetHeader[`X-B3-ParentSpanId`, String](_.toString),
-        maybeB3Sampled = request.attemptGetHeader[`X-B3-Sampled`, String](_.toString)
+        maybeB3TraceId =
+          request.attemptGetHeader[`X-B3-TraceId`, B3TraceId](header => B3TraceId(header)),
+        maybeB3SpanId =
+          request.attemptGetHeader[`X-B3-SpanId`, B3SpanId](header => B3SpanId(header)),
+        maybeB3ParentSpanId = request
+          .attemptGetHeader[`X-B3-ParentSpanId`, B3ParentSpanId](header => B3ParentSpanId(header)),
+        maybeB3Sampled =
+          request.attemptGetHeader[`X-B3-Sampled`, B3Sampled](header => B3Sampled(header))
       )
 
       OptionT.liftF(local.set(requestInfo)) *> routes(request)
