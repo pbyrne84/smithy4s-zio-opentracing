@@ -3,6 +3,7 @@ import smithy4s.hello.{Greeting, HelloWorldService}
 
 final class HelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
     extends HelloWorldService[IO] {
+
   def hello(
       name: String,
       town: Option[String]

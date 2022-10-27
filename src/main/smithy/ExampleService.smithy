@@ -33,18 +33,21 @@ structure OutgoingRequestTracing {
 @error("server")
 @httpError(500)
 structure GenericServerError with [OutgoingRequestTracing] {
+    @required
     message: String
 }
 
 @error("client")
 @httpError(400)
 structure GenericBadRequestError with [OutgoingRequestTracing]  {
+    @required
     message: String
 }
 
 @error("client")
 @httpError(422)
 structure GenericUnprocessableEntityError with [OutgoingRequestTracing] {
+    @required
     message: String
 }
 
