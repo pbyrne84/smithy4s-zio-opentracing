@@ -1,6 +1,6 @@
 package trace
 
-import org.http4s.Header
+import org.http4s.{Header, ParseFailure}
 import org.http4s.headers.{`X-B3-ParentSpanId`, `X-B3-Sampled`, `X-B3-SpanId`, `X-B3-TraceId`}
 
 sealed abstract class B3[A, B](implicit val headerInstance: Header[A, Header.Single]) {
@@ -11,12 +11,14 @@ sealed abstract class B3[A, B](implicit val headerInstance: Header[A, Header.Sin
     genericApply(str, header)
   }
 
+  def fromString(headerValue: String): Either[ParseFailure, B] =
+    headerInstance.parse(headerValue).map(apply)
+
 }
 
 object B3TraceId extends B3[`X-B3-TraceId`, B3TraceId] {
   override protected def genericApply(stringValue: String, header: `X-B3-TraceId`): B3TraceId =
     B3TraceId(stringValue, header)
-
 
 }
 
