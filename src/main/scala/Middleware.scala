@@ -15,7 +15,7 @@ import trace._
 
 object Middleware {
   implicit class RequestOps(request: Request[IO]) {
-    def attemptGetHeader[A, B](map: A => B)(implicit
+    def maybeHeader[A, B](map: A => B)(implicit
         ev: Header[A, Header.Single]
     ): Option[B] =
       request.headers.get[A].map { a: A => map(a) }
@@ -35,17 +35,15 @@ object Middleware {
 
   private def extractTracingHeaders(request: Request[IO]): RequestInfo = {
     RequestInfo(
-      maybeContentType = request.attemptGetHeader[`Content-Type`, String](contentType =>
+      maybeContentType = request.maybeHeader[`Content-Type`, String](contentType =>
         s"${contentType.mediaType.mainType}/${contentType.mediaType.subType}"
       ),
-      maybeUserAgent = request.attemptGetHeader[`User-Agent`, String](_.product.toString),
-      maybeB3TraceId =
-        request.attemptGetHeader[`X-B3-TraceId`, B3TraceId](header => B3TraceId(header)),
-      maybeB3SpanId = request.attemptGetHeader[`X-B3-SpanId`, B3SpanId](header => B3SpanId(header)),
+      maybeUserAgent = request.maybeHeader[`User-Agent`, String](_.product.toString),
+      maybeB3TraceId = request.maybeHeader[`X-B3-TraceId`, B3TraceId](header => B3TraceId(header)),
+      maybeB3SpanId = request.maybeHeader[`X-B3-SpanId`, B3SpanId](header => B3SpanId(header)),
       maybeB3ParentSpanId = request
-        .attemptGetHeader[`X-B3-ParentSpanId`, B3ParentSpanId](header => B3ParentSpanId(header)),
-      maybeB3Sampled =
-        request.attemptGetHeader[`X-B3-Sampled`, B3Sampled](header => B3Sampled(header))
+        .maybeHeader[`X-B3-ParentSpanId`, B3ParentSpanId](header => B3ParentSpanId(header)),
+      maybeB3Sampled = request.maybeHeader[`X-B3-Sampled`, B3Sampled](header => B3Sampled(header))
     )
   }
 }
