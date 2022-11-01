@@ -42,11 +42,10 @@ libraryDependencies ++= List(
   "io.getquill" %% "quill-jasync-postgres" % "4.3.0",
   "io.opentracing" % "opentracing-mock" % "0.33.0" % Test,
   "com.h2database" % "h2" % "2.1.214",
-  "io.d11" %% "zhttp-test" % "2.0.0-RC9" % Test,
-  "dev.zio" %% "zio-test" % zioVersion % Test,
+  "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test,
   "org.mockito" % "mockito-all" % "1.10.19" % Test,
-  "dev.zio" %% "zio-test-sbt" % zioVersion % Test,
-  "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test
+  "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test,
+  "org.scalatest" %% "scalatest" % "3.2.14" % Test
 )
 
 val example = project
