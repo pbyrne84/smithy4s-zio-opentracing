@@ -72,8 +72,6 @@ final class HelloWorldServiceImpl2(requestInfoEffect: IO[RequestInfo])
       town: Option[String]
   ): IO[Greeting] = {
 
-    def runF[F[_]: Monad: Trace] = {}
-
     import cats.implicits._
     import trace4cats._
 
