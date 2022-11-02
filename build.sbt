@@ -9,6 +9,13 @@ val zioLoggingVersion = "2.1.0"
 val natchezExtrasVersion = "6.2.4"
 val natchezVersion = "0.1.5"
 
+scalacOptions in GlobalScope ++= Seq(
+  "-Xfatal-warnings",
+  "-feature",
+  "-language:higherKinds",
+  "-deprecation"
+)
+
 libraryDependencies ++= List(
   "dev.zio" %% "zio" % zioVersion,
   "io.d11" %% "zhttp" % "2.0.0-RC10",
@@ -43,7 +50,7 @@ libraryDependencies ++= List(
   "io.opentracing" % "opentracing-mock" % "0.33.0" % Test,
   "com.h2database" % "h2" % "2.1.214",
   "io.janstenpickle" %% "trace4cats-core" % "0.14.0",
-"io.janstenpickle" %% "trace4cats-avro-exporter" % "0.14.0",
+  "io.janstenpickle" %% "trace4cats-avro-exporter" % "0.14.0",
   "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test,
   "org.mockito" % "mockito-all" % "1.10.19" % Test,
   "com.github.tomakehurst" % "wiremock" % "2.27.2" % Test,
@@ -58,7 +65,8 @@ val example = project
       "com.disneystreaming.smithy4s" %% "smithy4s-http4s" % smithy4sVersion.value,
       "com.disneystreaming.smithy4s" %% "smithy4s-http4s-swagger" % smithy4sVersion.value,
       "org.http4s" %% "http4s-ember-server" % "0.23.16"
-    )
+    ),
+    addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.2").cross(CrossVersion.full))
   )
 
 Test / parallelExecution := false

@@ -1,5 +1,6 @@
 import cats.Monad
 import cats.data.Kleisli
+import cats.effect.unsafe.implicits.global
 import cats.effect.{Async, IO, IOLocal, Resource}
 import org.http4s.CharsetRange.*
 import scalaz.Applicative
@@ -72,15 +73,17 @@ final class HelloWorldServiceImpl2(requestInfoEffect: IO[RequestInfo])
       town: Option[String]
   ): IO[Greeting] = {
 
-    import cats.implicits._
     import trace4cats._
 
     entryPoint[IO](TraceProcess("trace4cats")).use { ep =>
       ep.root("this is the root span").use { span =>
 
         val helloServiceWithTracing = new HelloServiceWithTracing()
+
+        val a = Kleisli[IO, Span[IO], RequestInfo](_ => requestInfoEffect)
+
         helloServiceWithTracing
-          .hello[Kleisli[IO, Span[IO], *]](requestInfoEffect, name, town)
+          .hello[Kleisli[IO, Span[IO], *]](a, name, town)
           .run(span)
 
       }
