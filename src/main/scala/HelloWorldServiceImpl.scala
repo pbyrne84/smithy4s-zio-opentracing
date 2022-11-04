@@ -66,15 +66,6 @@ class HelloServiceWithTracing {
     } yield greeting
   }
 
-  private def xSpan[F[_]: Monad: Trace: Console] = {
-
-    for {
-
-      a <- Trace[F].span("kamon-cats-io-3")
-
-    } yield ()
-  }
-
   private def createGreeting(name: String): Greeting =
     Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
 
