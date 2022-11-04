@@ -12,7 +12,7 @@ object Routes {
     val eventualRequestInfo = createEventualMaybeRequestInfo(local)
 
     smithy4s.http4s.SimpleRestJsonBuilder
-      .routes(new HelloWorldServiceImpl(eventualRequestInfo))
+      .routes(new HelloWorldServiceImpl2(eventualRequestInfo))
       .flatMapErrors { case error =>
         eventualRequestInfo.map { requestInfo =>
           new GenericBadRequestError("", "", "", "", "bananananana " + error + requestInfo)

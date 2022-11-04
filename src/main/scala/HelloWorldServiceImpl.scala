@@ -1,5 +1,6 @@
 import cats.Monad
 import cats.data.Kleisli
+import cats.effect.std.Console
 import cats.effect.unsafe.implicits.global
 import cats.effect.{Async, IO, IOLocal, Resource}
 import org.http4s.CharsetRange.*
@@ -41,7 +42,7 @@ final class HelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
 
 class HelloServiceWithTracing {
 
-  def hello[F[_]: Monad: Trace](
+  def hello[F[_]: Monad: Trace: Console](
       requestInfoEffect: F[RequestInfo],
       name: String,
       town: Option[String]
@@ -50,6 +51,11 @@ class HelloServiceWithTracing {
 
     for {
       requestInfo <- requestInfoEffect
+      _ <- Trace[F].span("span1") {
+        Console[F].println("trace this operation")
+      }
+      traceId <- Trace[F].traceId
+      _ <- Console[F].println(traceId)
       greeting =
         town match {
           case None =>
@@ -58,6 +64,15 @@ class HelloServiceWithTracing {
             createGreeting(s"Hello $name from $t!")
         }
     } yield greeting
+  }
+
+  private def xSpan[F[_]: Monad: Trace: Console] = {
+
+    for {
+
+      a <- Trace[F].span("kamon-cats-io-3")
+
+    } yield ()
   }
 
   private def createGreeting(name: String): Greeting =
@@ -78,9 +93,12 @@ final class HelloWorldServiceImpl2(requestInfoEffect: IO[RequestInfo])
     entryPoint[IO](TraceProcess("trace4cats")).use { ep =>
       ep.root("this is the root span").use { span =>
 
+        val someInt: Option[Int] = Some(1)
+
         val helloServiceWithTracing = new HelloServiceWithTracing()
 
         val a = Kleisli[IO, Span[IO], RequestInfo](_ => requestInfoEffect)
+        val b = Kleisli[Option, String, Int](_ => someInt)
 
         helloServiceWithTracing
           .hello[Kleisli[IO, Span[IO], *]](a, name, town)
