@@ -6,6 +6,7 @@ import cats.effect.{Async, IO, IOLocal, Resource}
 import org.http4s.CharsetRange.*
 import scalaz.Applicative
 import smithy4s.hello.{Greeting, HelloWorldService, HelloWorldServiceGen}
+import trace.RequestInfo
 import trace4cats.avro.AvroSpanCompleter
 import trace4cats.kernel.SpanSampler
 import trace4cats.{CompleterConfig, EntryPoint, Span, Trace, TraceProcess}
@@ -40,38 +41,7 @@ final class HelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
 
 }
 
-class HelloServiceWithTracing {
-
-  def hello[F[_]: Monad: Trace: Console](
-      requestInfoEffect: F[RequestInfo],
-      name: String,
-      town: Option[String]
-  ): F[Greeting] = {
-    import cats.implicits._
-
-    for {
-      requestInfo <- requestInfoEffect
-      _ <- Trace[F].span("span1") {
-        Console[F].println("trace this operation")
-      }
-      traceId <- Trace[F].traceId
-      _ <- Console[F].println(traceId)
-      greeting =
-        town match {
-          case None =>
-            createGreeting(s"Hello $name!")
-          case Some(t) =>
-            createGreeting(s"Hello $name from $t!")
-        }
-    } yield greeting
-  }
-
-  private def createGreeting(name: String): Greeting =
-    Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
-
-}
-
-final class HelloWorldServiceImpl2(requestInfoEffect: IO[RequestInfo])
+final class Trace4CatsHelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
     extends HelloWorldService[IO] {
 
   def hello(
@@ -83,7 +53,7 @@ final class HelloWorldServiceImpl2(requestInfoEffect: IO[RequestInfo])
 
     entryPoint[IO](TraceProcess("trace4cats")).use { ep =>
       ep.root("this is the root span").use { span =>
-        val helloServiceWithTracing = new HelloServiceWithTracing()
+        val helloServiceWithTracing = new Trace4CatsHelloServiceWithTracing()
         val getRequestKleisli = Kleisli[IO, Span[IO], RequestInfo](_ => requestInfoEffect)
 
         helloServiceWithTracing

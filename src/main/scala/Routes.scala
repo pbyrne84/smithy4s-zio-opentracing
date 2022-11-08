@@ -3,6 +3,7 @@ import cats.effect.kernel.Resource
 import cats.implicits.toSemigroupKOps
 import org.http4s.HttpRoutes
 import smithy4s.hello.GenericBadRequestError
+import trace.RequestInfo
 
 object Routes {
   private val docs =
@@ -12,7 +13,7 @@ object Routes {
     val eventualRequestInfo = createEventualMaybeRequestInfo(local)
 
     smithy4s.http4s.SimpleRestJsonBuilder
-      .routes(new HelloWorldServiceImpl2(eventualRequestInfo))
+      .routes(new Trace4CatsHelloWorldServiceImpl(eventualRequestInfo))
       .flatMapErrors { case error =>
         eventualRequestInfo.map { requestInfo =>
           new GenericBadRequestError("", "", "", "", "bananananana " + error + requestInfo)
