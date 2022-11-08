@@ -83,16 +83,11 @@ final class HelloWorldServiceImpl2(requestInfoEffect: IO[RequestInfo])
 
     entryPoint[IO](TraceProcess("trace4cats")).use { ep =>
       ep.root("this is the root span").use { span =>
-
-        val someInt: Option[Int] = Some(1)
-
         val helloServiceWithTracing = new HelloServiceWithTracing()
-
-        val a = Kleisli[IO, Span[IO], RequestInfo](_ => requestInfoEffect)
-        val b = Kleisli[Option, String, Int](_ => someInt)
+        val getRequestKleisli = Kleisli[IO, Span[IO], RequestInfo](_ => requestInfoEffect)
 
         helloServiceWithTracing
-          .hello[Kleisli[IO, Span[IO], *]](a, name, town)
+          .hello[Kleisli[IO, Span[IO], *]](getRequestKleisli, name, town)
           .run(span)
 
       }
