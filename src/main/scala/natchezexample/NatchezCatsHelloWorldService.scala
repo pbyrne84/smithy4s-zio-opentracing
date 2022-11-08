@@ -1,3 +1,3 @@
-package natchez
+package natchezexample
 
 class NatchezCatsHelloWorldService {}
