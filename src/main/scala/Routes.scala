@@ -4,6 +4,7 @@ import cats.implicits.toSemigroupKOps
 import org.http4s.HttpRoutes
 import smithy4s.hello.GenericBadRequestError
 import trace.RequestInfo
+import trace4cats.Trace4CatsHelloWorldServiceImpl
 
 object Routes {
   private val docs =

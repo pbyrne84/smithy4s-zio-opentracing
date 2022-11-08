@@ -1,45 +1,14 @@
-import cats.Monad
+package trace4cats
+
 import cats.data.Kleisli
-import cats.effect.std.Console
-import cats.effect.unsafe.implicits.global
-import cats.effect.{Async, IO, IOLocal, Resource}
+import cats.effect.{Async, IO, Resource}
 import org.http4s.CharsetRange.*
-import scalaz.Applicative
-import smithy4s.hello.{Greeting, HelloWorldService, HelloWorldServiceGen}
+import smithy4s.hello.{Greeting, HelloWorldService}
 import trace.RequestInfo
 import trace4cats.avro.AvroSpanCompleter
 import trace4cats.kernel.SpanSampler
-import trace4cats.{CompleterConfig, EntryPoint, Span, Trace, TraceProcess}
 
 import scala.concurrent.duration.DurationInt
-
-final class HelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
-    extends HelloWorldService[IO] {
-
-  def hello(
-      name: String,
-      town: Option[String]
-  ): IO[Greeting] = {
-    def createGreeting(str: String): Greeting =
-      Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
-
-    for {
-      requestInfo <- requestInfoEffect
-      local <- IOLocal(42)
-      _ <- IO.println("REQUEST_INFO: " + requestInfo)
-      greeting <- IO.pure {
-        town match {
-          case None =>
-            createGreeting(s"Hello $name!")
-          case Some(t) =>
-            createGreeting(s"Hello $name from $t!")
-        }
-      }
-
-    } yield greeting
-  }
-
-}
 
 final class Trace4CatsHelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
     extends HelloWorldService[IO] {
@@ -48,8 +17,6 @@ final class Trace4CatsHelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
       name: String,
       town: Option[String]
   ): IO[Greeting] = {
-
-    import trace4cats._
 
     entryPoint[IO](TraceProcess("trace4cats")).use { ep =>
       ep.root("this is the root span").use { span =>
