@@ -1,0 +1,3 @@
+package natchez
+
+class NatchezCatsHelloWorldService {}

@@ -1,9 +1,10 @@
-package trace4cats
+package trace4catsexample
 
 import cats.Monad
 import cats.effect.std.Console
 import smithy4s.hello.Greeting
 import trace.RequestInfo
+import trace4cats.Trace
 
 class Trace4CatsHelloServiceWithTracing {
 

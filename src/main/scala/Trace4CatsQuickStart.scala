@@ -3,15 +3,12 @@ import cats.data.Kleisli
 import cats.effect._
 import cats.effect.std.Console
 import cats.implicits._
-import trace4cats.TraceProcess
-import trace4cats.EntryPoint
-import trace4cats.CompleterConfig
-import trace4cats.SpanSampler
-import trace4cats.Trace
-import trace4cats.SpanKind
-import trace4cats.SpanStatus
-import trace4cats.Span
+import trace4cats.model.{SpanKind, TraceProcess}
+import trace4cats.{CompleterConfig, EntryPoint, Span, SpanStatus}
 import trace4cats.avro.AvroSpanCompleter
+import trace4cats.kernel.SpanSampler
+import trace4cats.Trace
+
 import scala.concurrent.duration._
 
 object Trace4CatsQuickStart extends IOApp.Simple {

@@ -1,16 +1,18 @@
-package trace4cats
+package trace4catsexample
 
 import cats.data.Kleisli
 import cats.effect.{Async, IO, Resource}
 import org.http4s.CharsetRange.*
 import smithy4s.hello.{Greeting, HelloWorldService}
 import trace.RequestInfo
+import trace4cats.{CompleterConfig, EntryPoint, Span}
 import trace4cats.avro.AvroSpanCompleter
 import trace4cats.kernel.SpanSampler
+import trace4cats.model.TraceProcess
 
 import scala.concurrent.duration.DurationInt
 
-final class Trace4CatsHelloWorldServiceImpl(requestInfoEffect: IO[RequestInfo])
+final class Trace4CatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
     extends HelloWorldService[IO] {
 
   def hello(
