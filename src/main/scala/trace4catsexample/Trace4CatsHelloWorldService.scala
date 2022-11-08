@@ -20,7 +20,7 @@ final class Trace4CatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
       town: Option[String]
   ): IO[Greeting] = {
 
-    entryPoint[IO](TraceProcess("trace4cats")).use { ep =>
+    entryPoint[IO](TraceProcess("trace4cats")).use { ep: EntryPoint[IO] =>
       ep.root("this is the root span").use { span =>
         val helloServiceWithTracing = new Trace4CatsHelloServiceWithTracing()
         val getRequestKleisli = Kleisli[IO, Span[IO], RequestInfo](_ => requestInfoEffect)

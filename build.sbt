@@ -50,6 +50,7 @@ libraryDependencies ++= List(
   "io.opentracing" % "opentracing-mock" % "0.33.0" % Test,
   "com.h2database" % "h2" % "2.1.214",
   "io.janstenpickle" %% "trace4cats-core" % "0.14.0",
+  "io.jaegertracing" % "jaeger-core" % "1.6.0",
   "io.janstenpickle" %% "trace4cats-avro-exporter" % "0.14.0",
   "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test,
   "org.mockito" % "mockito-all" % "1.10.19" % Test,
