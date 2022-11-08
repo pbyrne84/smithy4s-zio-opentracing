@@ -4,10 +4,10 @@ import org.http4s.ember.server._
 import org.http4s.implicits._
 import trace.RequestInfo
 
-object Main extends IOApp.Simple {
+object IOMain extends IOApp.Simple {
 
   def run: IO[Unit] = IOLocal(RequestInfo()).flatMap { local =>
-    Routes
+    IORoutes
       .getAll(local)
       .flatMap { routes =>
         EmberServerBuilder

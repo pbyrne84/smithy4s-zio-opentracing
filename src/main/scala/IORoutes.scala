@@ -6,7 +6,7 @@ import smithy4s.hello.GenericBadRequestError
 import trace.RequestInfo
 import trace4catsexample.Trace4CatsHelloWorldService
 
-object Routes {
+object IORoutes {
   private val docs =
     smithy4s.http4s.swagger.docs[IO](smithy4s.hello.HelloWorldService)
 
