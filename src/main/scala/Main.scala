@@ -1,9 +1,8 @@
 import cats.effect._
 import com.comcast.ip4s._
 import org.http4s.ember.server._
-import org.http4s.headers.`X-B3-TraceId`
 import org.http4s.implicits._
-import trace.{B3Companion, B3ParentSpanId, B3Sampled, B3SpanId, B3TraceId, B3Value, RequestInfo}
+import trace.RequestInfo
 
 object Main extends IOApp.Simple {
 

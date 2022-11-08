@@ -1,16 +1,8 @@
 import cats.data._
 import cats.effect.{IO, IOLocal}
-import org.http4s.{Header, HttpRoutes, Request}
 import cats.syntax.all._
-import natchez.Kernel
-import org.http4s.headers.{
-  `Content-Type`,
-  `User-Agent`,
-  `X-B3-ParentSpanId`,
-  `X-B3-Sampled`,
-  `X-B3-SpanId`,
-  `X-B3-TraceId`
-}
+import org.http4s.headers._
+import org.http4s.{Header, HttpRoutes, Request}
 import trace._
 
 object Middleware {
@@ -27,8 +19,6 @@ object Middleware {
   ): HttpRoutes[IO] =
     HttpRoutes[IO] { request: Request[IO] =>
       val requestInfo = extractTracingHeaders(request)
-
-      val kernel = Kernel(requestInfo.kernalHeaders)
 
       OptionT.liftF(local.set(requestInfo)) *> routes(request)
     }
