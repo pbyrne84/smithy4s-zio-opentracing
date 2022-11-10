@@ -1,3 +1,5 @@
+package exampleio
+
 import cats.data._
 import cats.effect.{IO, IOLocal}
 import cats.syntax.all._
@@ -5,8 +7,8 @@ import org.http4s.headers._
 import org.http4s.{Header, HttpRoutes, Request}
 import trace._
 
-object Middleware {
-  implicit class RequestOps(request: Request[IO]) {
+object IOMiddleware {
+  private implicit class RequestOps(request: Request[IO]) {
     def maybeHeader[A, B](map: A => B)(implicit
         ev: Header[A, Header.Single]
     ): Option[B] =
@@ -15,12 +17,15 @@ object Middleware {
 
   def withRequestInfo(
       routes: HttpRoutes[IO],
-      local: IOLocal[RequestInfo]
+      ioLocalRequestInfo: IOLocal[RequestInfo]
   ): HttpRoutes[IO] =
     HttpRoutes[IO] { request: Request[IO] =>
       val requestInfo = extractTracingHeaders(request)
 
-      OptionT.liftF(local.set(requestInfo)) *> routes(request)
+      val updatedLocalRequestInfo: OptionT[IO, Unit] =
+        OptionT.liftF(ioLocalRequestInfo.set(requestInfo))
+
+      updatedLocalRequestInfo *> routes(request)
     }
 
   private def extractTracingHeaders(request: Request[IO]): RequestInfo = {

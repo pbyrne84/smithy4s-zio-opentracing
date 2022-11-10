@@ -1,4 +1,4 @@
-package trace4catsexample
+package exampleio.trace4catsexample
 
 import cats.Monad
 import cats.effect.std.Console
