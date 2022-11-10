@@ -4,11 +4,8 @@ import cats.syntax.all._
 import org.http4s.headers._
 import org.http4s.{Header, HttpRoutes, Request}
 import trace._
-import zio.Task
 
 object ZIOMiddleware {
-
-  import zio.interop.catz._
 
   implicit class RequestOps(request: Request[Task]) {
     def maybeHeader[A, B](map: A => B)(implicit

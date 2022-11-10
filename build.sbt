@@ -25,6 +25,7 @@ libraryDependencies ++= List(
   "dev.zio" %% "zio-logging-slf4j" % zioLoggingVersion,
   "dev.zio" %% "zio-logging-slf4j-bridge" % zioLoggingVersion,
   "dev.zio" %% "zio-interop-cats" % "13.0.0.1",
+  "org.http4s" %% "http4s-blaze-server" % "0.23.12",
   "com.ovoenergy" %% "natchez-extras-http4s-stable" % natchezExtrasVersion,
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   "org.tpolecat" %% "natchez-log" % natchezVersion,

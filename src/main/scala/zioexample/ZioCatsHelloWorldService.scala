@@ -1,9 +1,8 @@
-package zio
+package zioexample
 
-import cats.effect.IO
 import smithy4s.hello.{Greeting, HelloWorldService}
+import zio.{Task, ZIO}
 
-import java.util
 class ZioCatsHelloWorldService extends HelloWorldService[Task] {
 
   def hello(
