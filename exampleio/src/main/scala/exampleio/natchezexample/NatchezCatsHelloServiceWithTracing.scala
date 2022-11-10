@@ -1,4 +1,4 @@
-package natchezexample
+package exampleio.natchezexample
 
 import cats.Monad
 import cats.effect.IO

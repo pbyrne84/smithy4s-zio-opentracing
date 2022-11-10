@@ -1,4 +1,4 @@
-package natchezexample
+package exampleio.natchezexample
 
 import cats.data.Kleisli
 import cats.effect.{IO, Resource, Sync}
