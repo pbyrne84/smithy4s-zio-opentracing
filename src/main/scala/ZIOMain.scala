@@ -7,7 +7,7 @@ import zio.{Scope, Task, ZIO, ZIOAppArgs, ZIOAppDefault}
 
 object ZIOMain extends ZIOAppDefault {
 
-  //  override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = {
+//   def moo  = {
 //    ZIO.runtime.flatMap { implicit r: Runtime[Clock] =>
 //      ZIORoutes.getAll.flatMap { routes: HttpRoutes[Task] =>
 //        import zio.interop.catz.core._
@@ -26,7 +26,7 @@ object ZIOMain extends ZIOAppDefault {
 //    }
 //
 //  }
-//
+
 //  val serve: Task[Unit] =
 //    ZIORoutes.getAll.flatMap { routes: HttpRoutes[Task] =>
 //      ZIO.executor.flatMap(executor =>
@@ -86,19 +86,20 @@ object ZIOMain extends ZIOAppDefault {
     import zio.interop.catz._
     import zio.interop.catz.implicits.rts
 
-    val zioRoutes: Resource[Task, HttpRoutes[Task]] = ZIORoutes.getAll
     val zioManagedRoutes: ZIO[Any with Scope, Throwable, HttpRoutes[Task]] =
       ZIORoutes.getAll.toScopedZIO
 
     import org.http4s._
     ZIO.executor.flatMap { executor =>
-      BlazeServerBuilder[Task]
-        .withExecutionContext(executor.asExecutionContext)
-        .bindHttp(8080, "localhost")
-        .withHttpWebSocketApp(wsb => Router("/" -> ZIO.succeed(Response(Status.Ok))).orNotFound)
-        .serve
-        .compile
-        .drain
+      zioManagedRoutes.flatMap { routes =>
+        BlazeServerBuilder[Task]
+          .withExecutionContext(executor.asExecutionContext)
+          .bindHttp(8080, "localhost")
+          .withHttpWebSocketApp(_ => routes.orNotFound)
+          .serve
+          .compile
+          .drain
+      }
     }
   }
 
