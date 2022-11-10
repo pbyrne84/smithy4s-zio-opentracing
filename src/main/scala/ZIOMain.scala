@@ -87,7 +87,8 @@ object ZIOMain extends ZIOAppDefault {
     import zio.interop.catz.implicits.rts
 
     val zioRoutes: Resource[Task, HttpRoutes[Task]] = ZIORoutes.getAll
-    val zioManagedRoutes = ZIORoutes.getAll.toManagedZIO
+    val zioManagedRoutes: ZIO[Any with Scope, Throwable, HttpRoutes[Task]] =
+      ZIORoutes.getAll.toScopedZIO
 
     import org.http4s._
     ZIO.executor.flatMap { executor =>
