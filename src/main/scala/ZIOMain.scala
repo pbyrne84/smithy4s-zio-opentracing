@@ -80,7 +80,7 @@ object ZIOMain extends ZIOAppDefault {
 //    )
 //  }
 
-  override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = ???
+  override def run: ZIO[Any with ZIOAppArgs with Scope, Any, Any] = serve
 
   val serve: Task[Unit] = {
     import zio.interop.catz._
@@ -90,17 +90,19 @@ object ZIOMain extends ZIOAppDefault {
       ZIORoutes.getAll.toScopedZIO
 
     import org.http4s._
-    ZIO.executor.flatMap { executor =>
-      zioManagedRoutes.flatMap { routes =>
-        BlazeServerBuilder[Task]
-          .withExecutionContext(executor.asExecutionContext)
-          .bindHttp(8080, "localhost")
-          .withHttpWebSocketApp(_ => routes.orNotFound)
-          .serve
-          .compile
-          .drain
+    ZIO.executor
+      .flatMap { executor =>
+        zioManagedRoutes.flatMap { routes =>
+          BlazeServerBuilder[Task]
+            .withExecutionContext(executor.asExecutionContext)
+            .bindHttp(8080, "localhost")
+            .withHttpWebSocketApp(_ => routes.orNotFound)
+            .serve
+            .compile
+            .drain
+        }
       }
-    }
+      .provide(Scope.default)
   }
 
 }
