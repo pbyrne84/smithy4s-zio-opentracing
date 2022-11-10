@@ -1,8 +1,8 @@
+import cats.effect.kernel.Resource
 import org.http4s.{HttpRoutes, Response}
 import org.http4s.blaze.server.BlazeServerBuilder
 import org.http4s.server.Router
 import org.http4s.server.websocket.WebSocketBuilder2
-
 import zio.{Scope, Task, ZIO, ZIOAppArgs, ZIOAppDefault}
 
 object ZIOMain extends ZIOAppDefault {
@@ -86,8 +86,11 @@ object ZIOMain extends ZIOAppDefault {
     import zio.interop.catz._
     import zio.interop.catz.implicits.rts
 
+    val zioRoutes: Resource[Task, HttpRoutes[Task]] = ZIORoutes.getAll
+    val zioManagedRoutes = ZIORoutes.getAll.toManagedZIO
+
     import org.http4s._
-    ZIO.executor.flatMap(executor =>
+    ZIO.executor.flatMap { executor =>
       BlazeServerBuilder[Task]
         .withExecutionContext(executor.asExecutionContext)
         .bindHttp(8080, "localhost")
@@ -95,7 +98,7 @@ object ZIOMain extends ZIOAppDefault {
         .serve
         .compile
         .drain
-    )
+    }
   }
 
 }

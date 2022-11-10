@@ -4,6 +4,7 @@ import cats.syntax.all._
 import org.http4s.headers._
 import org.http4s.{Header, HttpRoutes, Request}
 import trace._
+import zio.Task
 
 object ZIOMiddleware {
 
