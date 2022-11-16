@@ -15,7 +15,7 @@ object B3 {
   }
 
   /** @param headers
-    * @param enabled
+    * @param defaultToAlwaysSample
     *
     * If the sampled header does no exist then things like parent span ids are not set etc. Whether
     * this matter is important in logging is something else. Ideally whether the sample is worth
@@ -33,12 +33,12 @@ object B3 {
     */
   def defaultSampledHeader(
       headers: List[(String, String)],
-      enabled: Boolean = true
+      defaultToAlwaysSample: Boolean = true
   ): List[(String, String)] = {
     def generateDefaultHeader: (String, String) = {
       (
         B3.header.sampled,
-        if (enabled) {
+        if (defaultToAlwaysSample) {
           "1"
         } else {
           "0"

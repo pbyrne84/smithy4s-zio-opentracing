@@ -2,6 +2,7 @@ package zioexample.service
 
 import io.opentelemetry.sdk.trace.SdkTracerProvider
 import org.http4s.{Headers, Request}
+import smithy4s.hello.Greeting
 import zio.test._
 import zio.{Cause, Chunk, LogLevel, LogSpan, Ref, Scope, Task, UIO, ZIO, ZLayer}
 import zioexample.logging.{MDCLogEntry, SL4JTestLogger}
@@ -83,7 +84,12 @@ object ZioExampleServiceSpec extends ZIOSpecDefault {
         // Extra level of indentation so we can scope the testlogger.createLayer
         {
           for {
-            greeting <- ZioExampleService.hello(request, "name", None, alwaysTrace = false)
+            greeting <- ZioExampleService.hello(
+              request,
+              "name",
+              None,
+              defaultToAlwaysSample = false
+            )
           } yield assertTrue(
             convertContextLogEntries(contextLogEntries.toList) == expectedSampledResult
           )
@@ -105,10 +111,15 @@ object ZioExampleServiceSpec extends ZIOSpecDefault {
         // Extra level of indentation so we can scope the testlogger.createLayer
         {
           for {
-            greeting <- ZioExampleService.hello(request, "name", None, alwaysTrace = true)
-          } yield assertTrue(
-            convertContextLogEntries(contextLogEntries.toList) == expectedSampledResult
-          )
+            greeting <- ZioExampleService.hello(request, "name", None, defaultToAlwaysSample = true)
+          } yield {
+            assertTrue(
+              convertContextLogEntries(contextLogEntries.toList) == expectedSampledResult,
+              greeting.traceId == traceId,
+              greeting.spanId.matches("([a-f\\d]{16})"),
+              greeting.message == "Hello Hello name!!"
+            )
+          }
         }.provide(
           zio.telemetry.opentelemetry.Tracing.live,
           tracingLayer,
@@ -127,7 +138,12 @@ object ZioExampleServiceSpec extends ZIOSpecDefault {
         // Extra level of indentation so we can scope the testlogger.createLayer
         {
           for {
-            greeting <- ZioExampleService.hello(request, "name", None, alwaysTrace = false)
+            greeting <- ZioExampleService.hello(
+              request,
+              "name",
+              None,
+              defaultToAlwaysSample = false
+            )
           } yield assertTrue(
             convertContextLogEntries(contextLogEntries.toList) == expectedNonSampledResult
           )

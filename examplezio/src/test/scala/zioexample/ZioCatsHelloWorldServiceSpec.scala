@@ -7,7 +7,7 @@ import zio.test._
 object ZioCatsHelloWorldServiceSpec extends ZIOSpecDefault {
   override def spec: Spec[TestEnvironment with Scope, Any] = {
 
-    val service = new ZioCatsHelloWorldService(ZIO.succeed(Request()))
+    val service = new ZioHelloWorldService(ZIO.succeed(Request()))
 
     suite("ZioCatsHelloWorldService") {
       test("xxxx") {

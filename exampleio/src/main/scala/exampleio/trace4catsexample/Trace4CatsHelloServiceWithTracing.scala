@@ -33,6 +33,6 @@ class Trace4CatsHelloServiceWithTracing {
   }
 
   private def createGreeting(name: String): Greeting =
-    Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
+    Greeting(s"Hello $name!", "xxx", "xxxx", "1")
 
 }
