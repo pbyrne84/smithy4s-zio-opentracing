@@ -3,7 +3,7 @@
 A repo with an example of **smithy4s** (https://github.com/disneystreaming/smithy4s) and ZIO 2 with tracing/logging and testing.\
 This implementation is based off https://disneystreaming.github.io/smithy4s/docs/overview/quickstart/.
 
-smithy4s generates final tagless service which expects an implementation that fits  IO[\_] or Task[\_]. This in turn blocks
+smithy4s generates final tagless service which expects an implementation that fits  ```IO[_]``` or ```Task[\_]```. This in turn blocks
 the dependency management for ZIO as Task is **ZIO[Any, Throwable, A]**, the furthest left generic is where ZIO puts the layer 
 requirements. For example a call that requires tracing would be **ZIO[Any with Tracing, Nothing, Greeting]**. This
 means that we likely have to use the implementation that fits Task[_] to not hold business logic but simply handle the 
