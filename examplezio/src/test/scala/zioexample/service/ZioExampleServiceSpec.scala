@@ -73,7 +73,7 @@ object ZioExampleServiceSpec extends ZIOSpecDefault {
   override def spec: Spec[TestEnvironment with Scope, Any] = {
     suite("ZioExampleService")(
       test(
-        "should send span tracing through the system when sampling is enabled via header and alwaysTrace is disabled"
+        "should send span tracing through the system when sampling is enabled via header and defaultToAlwaysSample is disabled"
       ) {
         val headers = baseHeaders :+ (B3.header.sampled -> "1")
         val request = createRequest(headers)
@@ -100,7 +100,7 @@ object ZioExampleServiceSpec extends ZIOSpecDefault {
         )
       },
       test(
-        "should send span tracing through the system when sampling is not enabled via header and alwaysTrace is enabled"
+        "should send span tracing through the system when sampling is not enabled via header and defaultToAlwaysSample is enabled"
       ) {
         val headers = baseHeaders
         val request = createRequest(headers)
@@ -127,7 +127,7 @@ object ZioExampleServiceSpec extends ZIOSpecDefault {
         )
       },
       test(
-        "should not send span tracing through the system when sampling is not enabled via header and alwaysTrace is not enabled"
+        "should not send span tracing through the system when sampling is not enabled via header and defaultToAlwaysSample is not enabled"
       ) {
         val headers = baseHeaders
         val request = createRequest(headers)
