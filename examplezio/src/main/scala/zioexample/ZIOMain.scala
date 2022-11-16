@@ -14,6 +14,10 @@ object ZIOMain extends ZIOAppDefault {
   }
 
   def initialiseBlaze: ZIO[Scope, Throwable, Unit] = {
+    // I always put implicit imports close to use as it makes things easier to understand and also easy to copy.
+    // If they are used throughout the class then I would put them under the class definition so it is not
+    // lost in the main imports. Implicits can be a large barrier to entry.
+    // Intellij found **zio.interop.catz.implicits.rts** for me.
     import zio.interop.catz._
     import zio.interop.catz.implicits.rts
 

@@ -2,8 +2,7 @@ package zioexample
 
 import cats.effect.kernel.Resource
 import org.http4s.{HttpRoutes, Request}
-import org.typelevel.ci.CIString
-import zio.{FiberRef, Task, UIO, ZIO}
+import zio.{FiberRef, Task, UIO}
 
 object ZIORoutes {
 
@@ -18,7 +17,7 @@ object ZIORoutes {
   ): Resource[Task, HttpRoutes[Task]] = {
 
     smithy4s.http4s.SimpleRestJsonBuilder
-      .routes(new ZioCatsHelloWorldService(createEventualRequest(emptyRequestFibreRef)))
+      .routes(new ZioHelloWorldService(createEventualRequest(emptyRequestFibreRef)))
       .resource
       .map { routes =>
         import cats.implicits.toSemigroupKOps

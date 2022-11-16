@@ -9,7 +9,7 @@ trait TracedRequest {
   def traced[A, B, C](
       spanName: String,
       request: Request[Task],
-      alwaysTrace: Boolean = true
+      defaultToAlwaysSample: Boolean = true
   )(call: => ZIO[A, B, C]): ZIO[A with Tracing, B, C] = {
 
     for {
@@ -18,7 +18,7 @@ trait TracedRequest {
           request.headers.headers.map(header => header.name.toString -> header.value)
 
         val headersWithDefaultingSampleHeaders =
-          B3.defaultSampledHeader(currentHeaders, alwaysTrace)
+          B3.defaultSampledHeader(currentHeaders, defaultToAlwaysSample)
 
         val headers = Headers(headersWithDefaultingSampleHeaders)
 

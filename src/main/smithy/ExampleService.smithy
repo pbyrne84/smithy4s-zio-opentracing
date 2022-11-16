@@ -18,10 +18,6 @@ structure OutgoingRequestTracing {
     traceId: String
 
     @required
-    @httpHeader("X-B3-ParentSpanId")
-    parentSpanId: String
-
-    @required
     @httpHeader("X-B3-SpanId")
     spanId: String
 
@@ -52,7 +48,6 @@ structure GenericUnprocessableEntityError with [OutgoingRequestTracing] {
 }
 
 
-
 @documentation("This *is* documentation about the shape.")
 @http(method: "GET", uri: "/{name}", code: 200)
 operation Hello {
@@ -64,15 +59,15 @@ operation Hello {
 
 @mixin
 structure IncomingRequestTracing {
+    @required
     @httpHeader("X-B3-TraceId")
     traceId: String
 
-    @httpHeader("X-B3-ParentSpanId")
-    parentSpanId: String
-
+    @required
     @httpHeader("X-B3-SpanId")
     spanId: String
 
+    @required
     @httpHeader("X-B3-Sampled")
     sampled: String
 }
@@ -88,24 +83,8 @@ structure Person {
     town: String
 }
 
-structure Greeting {
+structure Greeting with [IncomingRequestTracing]{
     @required
     message: String
-
-    @required
-    @httpHeader("X-B3-TraceId")
-    traceId: String
-
-    @required
-    @httpHeader("X-B3-ParentSpanId")
-    parentSpanId: String
-
-    @required
-    @httpHeader("X-B3-SpanId")
-    spanId: String
-
-    @required
-    @httpHeader("X-B3-Sampled")
-    sampled: String
 }
 

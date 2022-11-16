@@ -8,8 +8,12 @@ import zio.logging.backend.SLF4J
 import zio.{Task, UIO, ZIO, ZLayer}
 import zioexample.service.ZioExampleService
 
-class ZioCatsHelloWorldService(val eventualRequest: UIO[Request[Task]])
-    extends HelloWorldService[Task] {
+// We need the request as we want the headers and the url for setting up the trace/MDC json logging.
+// It is nice to have certain things such a url info as an annotation in the logging.
+// The headers are required by the open tracing.
+// We should not require on the request for any business logic as that indicates a potential break in the
+// smithy4s contract.
+class ZioHelloWorldService(eventualRequest: UIO[Request[Task]]) extends HelloWorldService[Task] {
 
   // builder builder builder to get around inaccessibility of things
   private val tracer: Tracer =
