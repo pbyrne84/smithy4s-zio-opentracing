@@ -11,6 +11,10 @@ dependency management. Unless you can control your dependencies when testing it 
 involving time and dates tends to be very fragile and can lead to a culture of "rerun and it will work" which should not
 be promoted in an ideal world, tests that periodically fail can be symptomatic of deeper issues.
 
+More details of tracing can be found at
+[https://github.com/pbyrne84/zio2playground](https://github.com/pbyrne84/zio2playground)
+
+
 ## Implementation parts
 
 ### Blaze server
@@ -306,4 +310,11 @@ class ZioExampleService extends TracedRequest {
 }
 
 ```
+
+
+
+
+#### Other project overviews
+[https://pbyrne84.github.io/](https://pbyrne84.github.io/)
+
 
