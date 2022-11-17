@@ -60,7 +60,7 @@ object B3Tracing {
         spanContext = span.getSpanContext
         traceId = spanContext.getTraceId
         spanId = spanContext.getSpanId
-        parentSpanId = span.maybeParentSpanId.getOrElse("???")
+        parentSpanId = span.maybeParentSpanId.getOrElse("") // this will not exist unless sampled
         result <- effect @@ ExampleLogAnnotations.stringTraceId(traceId) @@
           ExampleLogAnnotations.parentSpanId(parentSpanId) @@
           ExampleLogAnnotations.stringSpanId(spanId) @@
