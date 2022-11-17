@@ -10,8 +10,11 @@ import org.http4s.CharsetRange.*
 import smithy4s.hello.{Greeting, HelloWorldService}
 import trace.RequestInfo
 
-//class NatchezCatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
-//    extends HelloWorldService[IO] {
+class NatchezCatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
+    extends HelloWorldService[IO] {
+
+  override def hello(name: String, town: Option[String]): IO[Greeting] = ???
+
 //  override def hello(name: String, town: Option[String]): IO[Greeting] = {
 //    entryPoint.use { ep: EntryPoint[IO] =>
 //
@@ -39,5 +42,5 @@ import trace.RequestInfo
 //
 //  private def createGreeting(name: String): Greeting =
 //    Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
-//
-//}
+
+}

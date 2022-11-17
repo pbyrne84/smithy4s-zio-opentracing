@@ -36,6 +36,7 @@ val example = project
     ),
     addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.2").cross(CrossVersion.full))
   )
+  .settings(scalaVersion := "2.13.8")
 
 Test / parallelExecution := false
 
@@ -79,13 +80,9 @@ lazy val examplezio = (project in file("examplezio"))
       "dev.zio" %% "zio-config-typesafe" % zioConfigVersion,
       "dev.zio" %% "zio-opentelemetry" % "2.0.1",
       "dev.zio" %% "zio-opentracing" % "2.0.1",
+      "dev.zio" %% "zio-test-sbt" % zioVersion % Test,
       "dev.zio" %% "zio-test" % zioVersion % Test
-    ),
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    )
   )
+  .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
   .dependsOn(example)
-
-lazy val all =
-  (project in file("all"))
-    .settings(scalaVersion := "2.13.8")
-    .dependsOn(exampleio, examplezio)
