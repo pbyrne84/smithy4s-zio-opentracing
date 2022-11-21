@@ -30,6 +30,10 @@ val example = project
   .enablePlugins(Smithy4sCodegenPlugin)
   .settings(
     libraryDependencies ++= Seq(
+      "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % "1.17.0",
+      "io.opentelemetry" % "opentelemetry-sdk-extension-autoconfigure" % "1.17.0-alpha",
+      "io.opentelemetry" % "opentelemetry-exporter-zipkin" % "1.17.0",
+      "io.opentelemetry" % "opentelemetry-exporter-jaeger" % "1.17.0",
       "com.disneystreaming.smithy4s" %% "smithy4s-http4s" % smithy4sVersion.value,
       "com.disneystreaming.smithy4s" %% "smithy4s-http4s-swagger" % smithy4sVersion.value,
       "org.http4s" %% "http4s-ember-server" % "0.23.16"
@@ -69,10 +73,6 @@ lazy val examplezio = (project in file("examplezio"))
       "dev.zio" %% "zio" % zioVersion,
       "io.d11" %% "zhttp" % "2.0.0-RC10",
       "org.http4s" %% "http4s-blaze-server" % "0.23.12",
-      "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % "1.17.0",
-      "io.opentelemetry" % "opentelemetry-sdk-extension-autoconfigure" % "1.17.0-alpha",
-      "io.opentelemetry" % "opentelemetry-exporter-zipkin" % "1.17.0",
-      "io.opentelemetry" % "opentelemetry-exporter-jaeger" % "1.17.0",
       "dev.zio" %% "zio-logging-slf4j" % zioLoggingVersion,
       "dev.zio" %% "zio-logging-slf4j-bridge" % zioLoggingVersion,
       "dev.zio" %% "zio-interop-cats" % "3.3.0",

@@ -4,7 +4,6 @@ import cats.effect._
 import com.comcast.ip4s._
 import org.http4s.Request
 import org.http4s.ember.server._
-import trace.RequestInfo
 
 object IOMain extends IOApp.Simple {
 

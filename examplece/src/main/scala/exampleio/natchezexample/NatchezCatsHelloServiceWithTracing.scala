@@ -9,7 +9,6 @@ import natchez.jaeger.Jaeger
 import natchez.{EntryPoint, Span, Trace}
 import org.http4s.Request
 import smithy4s.hello.Greeting
-import trace.RequestInfo
 
 class NatchezCatsHelloServiceWithTracing(jaegerTracer: JaegerTracer) {
   // import natchez.http4s.implicits._

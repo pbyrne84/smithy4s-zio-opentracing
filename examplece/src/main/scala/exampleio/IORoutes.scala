@@ -5,8 +5,6 @@ import cats.effect.kernel.Resource
 import exampleio.natchezexample.NatchezCatsHelloWorldService
 import org.http4s.{HttpRoutes, Request}
 import smithy4s.hello.GenericBadRequestError
-import trace.RequestInfo
-import trace4catsexample.Trace4CatsHelloWorldService
 
 object IORoutes {
   private val docs =

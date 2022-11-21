@@ -4,7 +4,6 @@ import cats.effect.IO
 import io.jaegertracing.internal.JaegerTracer
 import org.http4s.Request
 import smithy4s.hello.{Greeting, HelloWorldService}
-import trace.RequestInfo
 
 class NatchezCatsHelloWorldService(requTestIO: IO[Request[IO]]) extends HelloWorldService[IO] {
 
