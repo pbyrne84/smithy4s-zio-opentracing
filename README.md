@@ -1,4 +1,4 @@
-# smithy4s-zio-opentracing
+# smithy4s-zio-opentracing (Scala/ZIO/Smith4s/Logging/Tracing/OpenTelemetry)
 
 A repo with an example of **smithy4s** (https://github.com/disneystreaming/smithy4s) and ZIO 2 with tracing/logging and testing.\
 This implementation is based off https://disneystreaming.github.io/smithy4s/docs/overview/quickstart/.

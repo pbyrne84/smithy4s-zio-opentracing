@@ -45,7 +45,7 @@ Test / test := (Test / test)
   .dependsOn(Test / scalafmtCheck)
   .value
 
-lazy val exampleio = (project in file("exampleio"))
+lazy val examplece = (project in file("examplece"))
   .settings(
     scalaVersion := "2.13.8",
     libraryDependencies ++= List(
@@ -54,7 +54,9 @@ lazy val exampleio = (project in file("exampleio"))
       "org.tpolecat" %% "natchez-http4s" % "0.3.2",
       "org.tpolecat" %% "natchez-jaeger" % natchezVersion,
       "io.janstenpickle" %% "trace4cats-avro-exporter" % "0.14.0",
-      "com.ovoenergy" %% "natchez-extras-http4s-stable" % natchezExtrasVersion
+      "com.ovoenergy" %% "natchez-extras-http4s-stable" % natchezExtrasVersion,
+      "org.scalatest" %% "scalatest" % "3.2.14" % Test,
+      "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test
     ),
     addCompilerPlugin(("org.typelevel" %% "kind-projector" % "0.13.2").cross(CrossVersion.full))
   )
