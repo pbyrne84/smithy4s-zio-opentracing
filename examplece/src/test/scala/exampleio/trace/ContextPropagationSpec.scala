@@ -24,13 +24,14 @@ class ContextPropagationSpec extends AsyncWordSpec with AsyncIOSpec with Matcher
           new HeaderTextMapGetter
         )
         .asserting { context =>
+          context.makeCurrent()
+
           // which span is the right span as there are so many spans in this project
           val maybeSpanContext = Option(io.opentelemetry.api.trace.Span.fromContextOrNull(context))
             .map(_.getSpanContext)
 
           maybeSpanContext.map(_.getTraceId) shouldBe Some(traceId)
           maybeSpanContext.map(_.getSpanId) shouldBe Some(spanId)
-
         }
     }
   }

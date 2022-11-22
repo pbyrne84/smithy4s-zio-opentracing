@@ -58,6 +58,7 @@ lazy val examplece = (project in file("examplece"))
       "org.tpolecat" %% "natchez-http4s" % "0.3.2",
       "org.tpolecat" %% "natchez-jaeger" % natchezVersion,
       "io.janstenpickle" %% "trace4cats-avro-exporter" % "0.14.0",
+      "org.typelevel" %% "log4cats-slf4j" % "2.5.0",
       "com.ovoenergy" %% "natchez-extras-http4s-stable" % natchezExtrasVersion,
       "org.scalatest" %% "scalatest" % "3.2.14" % Test,
       "org.typelevel" %% "cats-effect-testing-scalatest" % "1.5.0" % Test
