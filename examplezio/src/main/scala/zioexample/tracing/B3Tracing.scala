@@ -1,9 +1,8 @@
 package zioexample.tracing
 
-import io.opentelemetry.api.trace.{SpanId, SpanKind, StatusCode, TraceId}
+import io.opentelemetry.api.trace.{SpanKind, StatusCode}
 import io.opentelemetry.context.propagation.TextMapPropagator
 import io.opentelemetry.extension.trace.propagation.B3Propagator
-import zhttp.http.Request
 import zio.telemetry.opentelemetry.Tracing
 import zio.{Task, Trace, ZIO}
 import zioexample.logging.ExampleLogAnnotations
@@ -11,11 +10,20 @@ import zioexample.logging.ExampleLogAnnotations
 //Copied from https://github.com/pbyrne84/zio2playground/blob/main/src/main/scala/com/github/pbyrne84/zio2playground/tracing/B3Tracing.scala
 object B3Tracing {
 
-  val b3Propagator: TextMapPropagator = B3Propagator.injectingMultiHeaders()
-  val headerTextMapGetter: ZioHeaderTextMapGetter = new ZioHeaderTextMapGetter()
+  private val b3Propagator: TextMapPropagator = B3Propagator.injectingMultiHeaders()
+  private val headerTextMapGetter: ZioHeaderTextMapGetter = new ZioHeaderTextMapGetter()
 
-  def requestInitialisationSpan[A, B, C](name: String, request: org.http4s.Request[Task])(
-      operation: ZIO[A, B, C]
+  def startTracing[A, B, C](name: String, request: org.http4s.Request[Task])(
+      operation: => ZIO[A, B, C]
+  ): ZIO[A with Tracing, B, C] = {
+    val spanName = s"${request.method}:${request.uri}"
+    requestInitialisationSpan(name, request)(
+      serverSpan(spanName)(operation)
+    )
+  }
+
+  private def requestInitialisationSpan[A, B, C](name: String, request: org.http4s.Request[Task])(
+      operation: => ZIO[A, B, C]
   )(implicit trace: Trace): ZIO[A with Tracing, B, C] = {
     import zio.telemetry.opentelemetry.TracingSyntax.OpenTelemetryZioOps
 

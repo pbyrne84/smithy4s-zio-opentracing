@@ -1,6 +1,6 @@
 package zioexample.logging
 
-import zhttp.http.{Method, Request, URL}
+import zhttp.http.Method
 import zio.Task
 import zio.logging.LogAnnotation
 
@@ -54,6 +54,12 @@ object ExampleLogAnnotations {
       combine = (_: org.http4s.Request[Task], r: org.http4s.Request[Task]) => r,
       render = (request: org.http4s.Request[Task]) => s"${request.method.toString}-${request.uri}"
     )
+
+  val incomingRequestBody: LogAnnotation[String] = LogAnnotation[String](
+    name = "incoming_request_body",
+    combine = (_: String, r: String) => r,
+    render = _.toString
+  )
 
   // May be worth having a log entry for sent payload if there is one.
   // Helps with finger pointing. If not an expected status code we should log

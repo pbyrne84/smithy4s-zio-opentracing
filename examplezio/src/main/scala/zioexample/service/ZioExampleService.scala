@@ -2,8 +2,8 @@ package zioexample.service
 
 import org.http4s.Request
 import smithy4s.hello.Greeting
-import zio.{Task, ZIO}
 import zio.telemetry.opentelemetry.Tracing
+import zio.{Task, ZIO}
 import zioexample.tracing.{B3Tracing, TracedRequest}
 
 object ZioExampleService {

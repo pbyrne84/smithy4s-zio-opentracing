@@ -2,7 +2,7 @@ package zioexample.tracing
 
 import org.http4s.{Headers, Request}
 import zio.telemetry.opentelemetry.Tracing
-import zio.{Task, UIO, ZIO}
+import zio.{Task, ZIO}
 
 trait TracedRequest {
 
@@ -25,7 +25,7 @@ trait TracedRequest {
         request.withHeaders(headers)
       }
 
-      tracedOperation <- B3Tracing.requestInitialisationSpan(spanName, defaultingSampledRequest)(
+      tracedOperation <- B3Tracing.startTracing(spanName, defaultingSampledRequest)(
         call
       )
     } yield tracedOperation

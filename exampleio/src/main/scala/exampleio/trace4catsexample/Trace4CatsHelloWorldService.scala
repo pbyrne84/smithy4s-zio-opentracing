@@ -3,12 +3,12 @@ package exampleio.trace4catsexample
 import cats.data.Kleisli
 import cats.effect.{Async, IO, Resource}
 import org.http4s.CharsetRange.*
-import smithy4s.hello.{Greeting, HelloWorldService}
+import smithy4s.hello.{Greeting, HelloWorldService, PersonResponse, PersonUpdatePayload}
 import trace.RequestInfo
-import trace4cats.{CompleterConfig, EntryPoint, Span}
 import trace4cats.avro.AvroSpanCompleter
 import trace4cats.kernel.SpanSampler
 import trace4cats.model.TraceProcess
+import trace4cats.{CompleterConfig, EntryPoint, Span}
 
 import scala.concurrent.duration.DurationInt
 
@@ -40,4 +40,5 @@ final class Trace4CatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
         EntryPoint[F](SpanSampler.always[F], completer)
     }
 
+  override def updatePerson(data: PersonUpdatePayload): IO[PersonResponse] = ???
 }

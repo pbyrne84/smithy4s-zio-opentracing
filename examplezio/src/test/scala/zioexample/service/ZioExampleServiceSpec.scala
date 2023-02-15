@@ -2,10 +2,9 @@ package zioexample.service
 
 import io.opentelemetry.sdk.trace.SdkTracerProvider
 import org.http4s.{Headers, Request}
-import smithy4s.hello.Greeting
 import zio.test._
-import zio.{Cause, Chunk, LogLevel, LogSpan, Ref, Scope, Task, UIO, ZIO, ZLayer}
-import zioexample.logging.{MDCLogEntry, SL4JTestLogger}
+import zio.{Cause, LogLevel, LogSpan, Scope, Task, ZIO, ZLayer}
+import zioexample.logging.SL4JTestLogger
 import zioexample.tracing.B3
 
 import scala.collection.mutable.ListBuffer

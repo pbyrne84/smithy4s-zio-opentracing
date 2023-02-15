@@ -2,10 +2,9 @@ scalaVersion := "2.13.8"
 version := "0.1"
 name := "smithy4s-zio-opentracing"
 
-val zioConfigVersion = "3.0.2"
-val zioVersion = "2.0.0"
-def zioLoggingVersion = "2.1.1"
-//val zioLoggingVersion = "2.1.0+3-a733f542+20220908-1603-SNAPSHOT"
+val zioConfigVersion = "3.0.7"
+val zioVersion = "2.0.9"
+val zioLoggingVersion = "2.1.1"
 val natchezExtrasVersion = "6.2.4"
 val natchezVersion = "0.1.5"
 
@@ -17,11 +16,11 @@ scalacOptions in GlobalScope ++= Seq(
 )
 
 libraryDependencies ++= List(
-  "ch.qos.logback" % "logback-classic" % "1.4.0",
+  "ch.qos.logback" % "logback-classic" % "1.4.5",
   "net.logstash.logback" % "logstash-logback-encoder" % "7.2",
-  "org.slf4j" % "jul-to-slf4j" % "1.7.36",
+  "org.slf4j" % "jul-to-slf4j" % "2.0.5",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
-  "io.jaegertracing" % "jaeger-core" % "1.6.0",
+  "io.jaegertracing" % "jaeger-core" % "1.8.1",
   "io.janstenpickle" %% "trace4cats-avro-exporter" % "0.14.0"
 )
 
@@ -45,7 +44,7 @@ Test / test := (Test / test)
   .dependsOn(Test / scalafmtCheck)
   .value
 
-lazy val exampleio = (project in file("exampleio"))
+lazy val exampleIo = (project in file("exampleio"))
   .settings(
     scalaVersion := "2.13.8",
     libraryDependencies ++= List(
@@ -60,29 +59,47 @@ lazy val exampleio = (project in file("exampleio"))
   )
   .dependsOn(example)
 
-lazy val examplezio = (project in file("examplezio"))
+val circeVersion = "0.14.4"
+lazy val exampleZio = (project in file("examplezio"))
   .settings(
     scalaVersion := "2.13.8",
     libraryDependencies ++= List(
       "dev.zio" %% "zio" % zioVersion,
       "io.d11" %% "zhttp" % "2.0.0-RC10",
-      "org.http4s" %% "http4s-blaze-server" % "0.23.12",
-      "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % "1.17.0",
+      "org.http4s" %% "http4s-blaze-server" % "0.23.13",
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "io.opentelemetry" % "opentelemetry-extension-trace-propagators" % "1.23.0",
       "io.opentelemetry" % "opentelemetry-sdk-extension-autoconfigure" % "1.17.0-alpha",
-      "io.opentelemetry" % "opentelemetry-exporter-zipkin" % "1.17.0",
-      "io.opentelemetry" % "opentelemetry-exporter-jaeger" % "1.17.0",
+      "io.opentelemetry" % "opentelemetry-exporter-zipkin" % "1.23.0",
+      "io.opentelemetry" % "opentelemetry-exporter-jaeger" % "1.23.0",
       "dev.zio" %% "zio-logging-slf4j" % zioLoggingVersion,
       "dev.zio" %% "zio-logging-slf4j-bridge" % zioLoggingVersion,
-      "dev.zio" %% "zio-interop-cats" % "3.3.0",
+      "dev.zio" %% "zio-interop-cats" % "23.0.0.0",
       "dev.zio" %% "zio-config-typesafe" % zioConfigVersion,
       "dev.zio" %% "zio-config-magnolia" % zioConfigVersion,
       "dev.zio" %% "zio-config-refined" % zioConfigVersion,
       "dev.zio" %% "zio-config-typesafe" % zioConfigVersion,
-      "dev.zio" %% "zio-opentelemetry" % "2.0.1",
-      "dev.zio" %% "zio-opentracing" % "2.0.1",
+      "dev.zio" %% "zio-opentelemetry" % "2.0.3",
+      "dev.zio" %% "zio-opentracing" % "2.0.3",
       "dev.zio" %% "zio-test-sbt" % zioVersion % Test,
       "dev.zio" %% "zio-test" % zioVersion % Test
-    )
+    ),
+    addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
   )
   .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
   .dependsOn(example)
+
+//not to be used in ci, intellij has got a bit bumpy in the format on save
+val formatZioAndRunTests =
+  taskKey[Unit](
+    "format all the ZIO modules, do not use on CI as any changes will not be committed"
+  )
+
+formatZioAndRunTests := {
+  (exampleZio / Test / test)
+    .dependsOn(exampleZio / Compile / scalafmtAll)
+    .dependsOn(exampleZio / Test / scalafmtAll)
+    .dependsOn(Compile / scalafmtSbt)
+}.value

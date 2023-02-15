@@ -7,7 +7,13 @@ import io.jaegertracing.internal.JaegerTracer
 import natchez.{EntryPoint, Span}
 import natchez.jaeger.Jaeger
 import org.http4s.CharsetRange.*
-import smithy4s.hello.{Greeting, HelloWorldService}
+import smithy4s.hello.{
+  Greeting,
+  HelloWorldService,
+  PersonResponse,
+  PersonUpdate,
+  PersonUpdatePayload
+}
 import trace.RequestInfo
 
 class NatchezCatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
@@ -43,4 +49,5 @@ class NatchezCatsHelloWorldService(requestInfoEffect: IO[RequestInfo])
 //  private def createGreeting(name: String): Greeting =
 //    Greeting(s"Hello $name!", "xxx", "xxxx", "xxx", "1")
 
+  override def updatePerson(data: PersonUpdatePayload): IO[PersonResponse] = ???
 }

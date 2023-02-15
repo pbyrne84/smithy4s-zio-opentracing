@@ -21,7 +21,7 @@ object IORoutes {
       .routes(new Trace4CatsHelloWorldService(eventualRequestInfo))
       .flatMapErrors { case error =>
         eventualRequestInfo.map { requestInfo =>
-          new GenericBadRequestError("", "", "", "bananananana " + error + requestInfo)
+          new GenericBadRequestError("", "", "", "bananananana " + error + requestInfo, "")
         }
       }
       .resource
