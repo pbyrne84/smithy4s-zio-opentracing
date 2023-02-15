@@ -1,7 +1,7 @@
 package zioexample
 
-import org.http4s.{HttpRoutes, Request}
 import org.http4s.blaze.server.BlazeServerBuilder
+import org.http4s.{HttpRoutes, Request}
 import zio.{FiberRef, Scope, Task, ZIO, ZIOAppArgs, ZIOAppDefault}
 
 import scala.concurrent.ExecutionContext
@@ -22,21 +22,21 @@ object ZIOMain extends ZIOAppDefault {
     }
   }
 
-  // public as the routes is what we will test against
+  // public as the routes is what we will tested against
   def getRoutes(
       emptyRequestFibreRef: FiberRef[Request[Task]]
   ): ZIO[Any with Scope, Throwable, HttpRoutes[Task]] = {
     import zio.interop.catz._
 
-    ZIORoutes.getAll(emptyRequestFibreRef).toScopedZIO
+    ZIORoutes.getRoutes(emptyRequestFibreRef).toScopedZIO
   }
 
   private def createBlazeServer(
       executionContext: ExecutionContext,
       routes: HttpRoutes[Task]
   ): Task[Unit] = {
-    import zio.interop.catz.implicits.rts
     import zio.interop.catz._
+    import zio.interop.catz.implicits.rts
 
     BlazeServerBuilder[Task]
       .withExecutionContext(executionContext)
@@ -46,4 +46,5 @@ object ZIOMain extends ZIOAppDefault {
       .compile
       .drain
   }
+
 }

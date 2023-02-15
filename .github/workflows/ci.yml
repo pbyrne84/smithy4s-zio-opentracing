@@ -10,5 +10,5 @@ jobs:
         with:
           java-version: adopt@1.11
       - name: Validate
-        run: sbt examplezio/test
+        run: sbt exampleZio/test
 

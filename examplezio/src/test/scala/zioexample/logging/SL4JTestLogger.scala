@@ -22,7 +22,9 @@ object SL4JTestLogger {
 
   val logFormatDefault: LogFormat = LogFormat.allAnnotations + LogFormat.line + LogFormat.cause
 
-  def createLayer(contextLogEntries: ListBuffer[Map[String, String]]): ZLayer[Any, Nothing, Unit] = {
+  def createLayer(
+      contextLogEntries: ListBuffer[Map[String, String]]
+  ): ZLayer[Any, Nothing, Unit] = {
 
     val testFormat: LogFormat =
       LogFormat.make { (builder, a, b, c, messageCall, d, fibrerRefs, e, annotations) =>

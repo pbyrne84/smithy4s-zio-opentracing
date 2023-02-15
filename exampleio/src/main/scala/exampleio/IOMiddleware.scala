@@ -28,7 +28,7 @@ object IOMiddleware {
       updatedLocalRequestInfo *> routes(request)
     }
 
-  private def extractTracingHeaders(request: Request[IO]): RequestInfo = {
+  def extractTracingHeaders(request: Request[IO]): RequestInfo = {
     RequestInfo(
       maybeContentType = request.maybeHeader[`Content-Type`, String](contentType =>
         s"${contentType.mediaType.mainType}/${contentType.mediaType.subType}"
